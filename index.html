@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeevansathi Test Case Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        textarea#appendText {
+    width: 100%;
+    height: 80px;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fafafa;
+    color: #333;
+    resize: vertical;
+}
+
+textarea#appendText:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+button {
+    margin-top: 10px;
+}
+
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+        h2 {
+            text-align: left;
+            color: #4CAF50;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: #fafafa;
+            color: #333;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #resultBox {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            display: none;
+        }
+
+        #resultBox h3 {
+            font-size: 1.5rem;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        pre {
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-x: auto;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            textarea {
+                height: 100px;
+            }
+
+            button {
+                font-size: 1rem;
+            }
+        }
+        button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Test Case Generator for Jeevansathi</h1>
+
+        <div class="form-group">
+            <label for="appendText">Feed data:</label>
+            <textarea id="appendText">Registration contains 3</textarea>
+        </div>
+        <button id="appendButton" onclick="appendToAssistantResponses()">Submit</button>
+        <h2>Generate cases</h2>
+        <div class="form-group">
+            <label for="systemInput">Perspective:</label>
+            <textarea id="systemInput">Imagine yourself as a manual jeevansathi product tester</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="userInput">What you want?</label>
+            <textarea id="userInput">Please create a testcases of jeevansathi registration point wise</textarea>
+        </div>
+
+        <button onclick="generateTestCases()">Generate</button>
+
+        <div id="resultBox">
+            <h3>Generated Test Cases:</h3>
+            <pre id="resultContent"></pre>
+        </div>
+    </div>
+
+    <script>
+        async function appendToAssistantResponses() {
+    const appendText = document.getElementById("appendText").value;
+    const appendButton = document.getElementById("appendButton"); 
+    const originalText = appendButton.textContent; 
+
+    if (!appendText.trim()) {
+        alert("Please enter some text before submitting.");
+        return;
+    }
+
+    try {
+        // Show loading state
+        appendButton.disabled = true;
+        appendButton.textContent = "Loading...";
+
+        // Simulate a 0.5-second delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        appendButton.disabled = false;
+        appendButton.textContent = originalText;
+
+        // Make the API request
+        const response = await fetch("http://localhost:3000/append", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ text: appendText })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        alert(data.message || "Text appended successfully!");
+
+        // Clear the text input after successful submission
+        document.getElementById("appendText").value = "";
+    } catch (error) {
+        console.error("Error appending text:", error);
+        alert("Failed to append text. Check the console for details.");
+    } finally {
+        // Reset the button to its original state
+        
+    }
+}
+
+
+        async function generateTestCases() {
+            const systemInput = document.getElementById("systemInput").value;
+            const userInput = document.getElementById("userInput").value;
+            // const assistantInput = document.getElementById("assistantInput").value;
+
+            const requestData = {
+                messages: [
+                    { role: "system", content: systemInput },
+                    { role: "user", content: userInput },
+                    { role: "assistant", content: " " }
+                ]
+            };
+
+            try {
+                const response = await fetch("http://localhost:3000/generate", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const result = data.data.results[0];
+                document.getElementById("resultContent").textContent = result;
+                document.getElementById("resultBox").style.display = "block";
+
+        
+
+            } catch (error) {
+                console.error('Error generating test cases:', error);
+                alert('Failed to fetch the data. Check the console for details.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+The First Name field is mandatory and accepts a maximum of 25 characters. If the input exceeds this limit, an error message stating, "First name length is too long. Maximum length is 25 characters," should be displayed. Similarly, the Last Name field is also mandatory and allows up to 25 characters, with the same error message displayed if the limit is exceeded.
+
+The Phone Number field is mandatory and should only accept valid numbers without special characters. If an invalid phone number is entered or special characters are included, the error message "Invalid phone number" should appear.
+
+The Gender field provides two options: Male and Female. This field is mandatory, and if no option is selected, the message "Gender is a mandatory field" should be shown.
+
+For the Email field, only valid email addresses are accepted. It is a required field, and an invalid entry will prompt the message: "Please enter a valid email address."
+
+The About Me field allows a maximum of 25 words and should not accept special characters. Once the word limit is reached, the text field is disabled, and the error message "Word limit exceeded. Max 25 words" is displayed. This field actively rejects special characters.
+
+The Submit button will only become enabled once all mandatory fields are correctly filled.
+
+Additionally, a Family Details field has been introduced. It is mandatory and accepts up to 25 words. Users must adhere to the word limit while providing these details.about me remove  Remove the about me field as mandatory field for registration and extend the word limit to 50 for about me field on registration page.  
